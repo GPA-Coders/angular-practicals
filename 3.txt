@@ -1,0 +1,24 @@
+---app.component.html---
+<button [disabled]="isDisabled">Disabled Button!</button>
+<button (click)="btnClicked()">Enabled Button!</button>
+
+---app.component.ts---
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  title = 'firstApp';
+  isDisabled = true;
+
+  btnClicked(){
+    alert("Button Clicked!");
+  }
+}
+
+---Output---
+|Disabled Button!|
+|Enabled Button!|

@@ -1,0 +1,65 @@
+---app.component.html---
+
+---app.component.ts---
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  template: `
+    <h1>Lazy Loading Demo</h1>
+    <nav>
+      <a routerLink="/data" routerLinkActive="active">Load Data</a>
+    </nav>
+    <router-outlet></router-outlet>
+  `
+})
+export class AppComponent { }
+
+---data.component.ts---
+import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
+@Component({
+  selector: 'app-data',
+  templateUrl: './data.component.html',
+})
+export class DataComponent implements OnInit {
+  data: any[];
+
+  constructor(private http: HttpClient) {}
+
+  ngOnInit() {
+    this.http.get<any[]>('https://jsonplaceholder.typicode.com/posts').subscribe(
+      (response: any[]) => {
+        this.data = response;
+      },
+      (error: any) => {
+        console.error('Error fetching data:', error);
+      }
+    );
+  }
+}
+
+---data.component.html---
+<h1>Data Component</h1>
+<div *ngFor="let item of data">
+  <p>{{ item.title }}</p>
+  <p>{{ item.body }}</p>
+</div>
+
+---app-routing.module.ts---
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+
+const routes: Routes = [
+  {
+    path: 'data',
+    loadChildren: () => import('./data/data.module').then(m => m.DataModule)
+  }
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }

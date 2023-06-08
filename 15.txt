@@ -1,0 +1,57 @@
+---app.component.html---
+<div>
+  <h2>User List</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users">
+        <td>{{ user.id }}</td>
+        <td>{{ user.name }}</td>
+        <td>{{ user.email }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+---app.component.ts---
+import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent implements OnInit {
+  users: User[] = [];
+
+  constructor(private http: HttpClient) {}
+
+  ngOnInit() {
+    this.getUsers();
+  }
+
+  getUsers() {
+    const apiUrl = 'https://jsonplaceholder.typicode.com/users';
+    this.http.get<User[]>(apiUrl).subscribe(
+      (response: User[]) => {
+        this.users = response;
+      },
+      (error: any) => {
+        console.error('Error fetching users:', error);
+      }
+    );
+  }
+}

@@ -1,0 +1,42 @@
+---app.component.html---
+
+---app.component.ts---
+import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+
+@Component({
+  selector: 'app-root',
+  template: `
+    <h1>CORS Example</h1>
+    <div *ngIf="posts">
+      <h2>Posts</h2>
+      <ul>
+        <li *ngFor="let post of posts">
+          <strong>{{ post.title }}</strong>
+          <p>{{ post.body }}</p>
+        </li>
+      </ul>
+    </div>
+  `
+})
+export class AppComponent implements OnInit {
+  posts: any[] = [];
+
+  constructor(private http: HttpClient) { }
+
+  ngOnInit() {
+    this.getPosts();
+  }
+
+  getPosts() {
+    const url = 'https://jsonplaceholder.typicode.com/posts';
+    this.http.get<any[]>(url).subscribe(
+      (response: any[]) => {
+        this.posts = response;
+      },
+      (error: any) => {
+        console.error('Error fetching posts:', error);
+      }
+    );
+  }
+}

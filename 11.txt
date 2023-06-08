@@ -1,0 +1,29 @@
+---app.component.html---
+
+
+---app.component.ts---
+import { Component, OnInit, OnDestroy } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  template: `
+    <h1>Component Lifecycle Demo</h1>
+    <p>{{ message }}</p>
+  `
+})
+export class AppComponent implements OnInit, OnDestroy {
+  message: string = '';
+
+  constructor() {
+    console.log('Constructor');
+  }
+
+  ngOnInit() {
+    console.log('ngOnInit');
+    this.message = 'Component Initialized';
+  }
+
+  ngOnDestroy() {
+    console.log('ngOnDestroy');
+  }
+}

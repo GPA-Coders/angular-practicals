@@ -1,0 +1,34 @@
+---app.component.html---
+<input #myInput type="text" name="inputText">
+<button (click)="addStudent(myInput.value)">Clear</button>
+
+<div *ngFor="let student of students; index as i">
+  <div *ngIf="student != null">
+    <span>{{student}}</span><button (click)=deleteStudent(i)>Delete</button>
+  </div>
+</div>
+
+
+
+---app.component.ts---
+import { Component } from '@angular/core';
+import { FormsModule} from "@angular/forms";
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  inputText = "";
+  students = Array();
+
+  addStudent(value: string){
+    this.inputText = value;
+    this.students.push(value);
+    this.inputText = "";
+  }
+  deleteStudent(index: number){
+    delete this.students[index];
+  }
+}

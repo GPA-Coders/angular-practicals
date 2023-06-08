@@ -1,0 +1,41 @@
+---app.component.html---
+<h1>Product Listing</h1>
+<input type="text" placeholder="Search by name or ID" (input)="searchProducts($event.target.value)">
+<ul>
+  <li *ngFor="let product of searchResults$ | async">{{ product.product_name }}</li>
+</ul>
+
+---app.component.ts---
+import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap, map } from 'rxjs/operators';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  searchResults$: Observable<any[]>;
+  private searchQuery$ = new Subject<string>();
+
+  constructor(private http: HttpClient) {
+    this.searchResults$ = this.searchQuery$.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap((query: string) => this.getProducts(query))
+    );
+  }
+
+  searchProducts(query: string): void {
+    this.searchQuery$.next(query);
+  }
+
+  getProducts(query: string): Observable<any[]> {
+    const url = `https://world.openfoodfacts.org/cgi/search.pl?search_terms=${query}`;
+    return this.http.get<any[]>(url).pipe(
+      map((response: any) => response.products),
+    );
+  }
+}

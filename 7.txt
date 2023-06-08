@@ -1,0 +1,58 @@
+---app.component.html---
+<input type="text" placeholder="Search by name or ID" #searchInput>
+<button (click)="searchProducts(searchInput.value)">Search</button>
+<button (click)="resetSearch()">Reset Search</button>
+
+<ul>
+  <li *ngFor="let product of filteredProducts">
+    <h3>{{ product.id }}</h3>
+    <p>Name: {{ product.name }}</p>
+    <p>Purchase Date: {{ product.purchaseDate }}</p>
+    <p>Price: {{ product.price }}</p>
+    <img [src]="'assets/images/' + product.image" alt="Product Image" width="100">
+  </li>
+</ul>
+
+
+---app.component.ts---
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  products: any[] = [
+    {
+      id: 1,
+      name: 'Product 1',
+      purchaseDate: new Date('2023-01-01'),
+      price: 19.99,
+      image: 'product1.jpg'
+    },
+    {
+      id: 2,
+      name: 'Product 2',
+      purchaseDate: new Date('2023-02-01'),
+      price: 29.99,
+      image: 'product2.jpg'
+    },
+    // Add more products as needed
+  ];
+
+  filteredProducts: any[] = [];
+
+  searchProducts(searchQuery: string): void {
+    this.filteredProducts = this.products.filter(product => {
+      return (
+        product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        product.id.toString().includes(searchQuery)
+      );
+    });
+  }
+
+  resetSearch(): void {
+    this.filteredProducts = [];
+  }
+}

@@ -1,0 +1,16 @@
+---app.component.html---
+<h1>This is app component!</h1>
+<app-comp1></app-comp1>
+<app-comp2></app-comp2>
+
+---comp1.component.html---
+<p>This is comp1!</p>
+
+---comp2.component.html---
+<p>This is comp2!</p>
+
+---Output---
+This is app component!
+This is comp1!
+
+This is comp2!

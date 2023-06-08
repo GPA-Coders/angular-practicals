@@ -1,0 +1,53 @@
+---app.component.html---
+<div>
+  <h1>E-commerce Product Page</h1>
+  <div class="product-list">
+    <div *ngFor="let product of products" (click)="showProductDetails(product)">
+      <img [src]="product.image" alt="Product Image" />
+      <h3>{{ product.name }}</h3>
+      <p>{{ product.price }}</p>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="selectedProduct">
+  <h2>Product Details</h2>
+  <div class="product-details">
+    <img [src]="selectedProduct.image" alt="Product Image" />
+    <h3>{{ selectedProduct.name }}</h3>
+    <p>{{ selectedProduct.price }}</p>
+    <p>{{ selectedProduct.description }}</p>
+  </div>
+</div>
+
+
+---app.component.ts---
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html'
+})
+export class AppComponent {
+  products = [
+    {
+      name: 'USB Rubber Ducky',
+      price: 30.00,
+      image: 'product1.jpg',
+      description: 'Bad USB stick with auto-run functionality!'
+    },
+    {
+      name: 'Wifi Jammer',
+      price: 19.99,
+      image: 'product2.jpg',
+      description: 'Wifi Jammer that performs DOS attack on selected network using ESP32 chipset!'
+    },
+    // Add more products here
+  ];
+
+  selectedProduct: any;
+
+  showProductDetails(product: any) {
+    this.selectedProduct = product;
+  }
+}

@@ -1,0 +1,62 @@
+---app.component.html---
+<h1>Multi-View App</h1>
+
+<!-- Login view -->
+<div *ngIf="!isLoggedIn">
+  <h2>Login</h2>
+  <!-- Add your login form here -->
+  <button (click)="login()">Login</button>
+</div>
+
+<!-- Home view -->
+<div *ngIf="isLoggedIn && currentView === 'home'">
+  <h2>Home</h2>
+  <p>Welcome to the Home Component!</p>
+  <button (click)="logout()">Logout</button>
+</div>
+
+<!-- Dashboard view -->
+<div *ngIf="isLoggedIn && currentView === 'dashboard'">
+  <h2>Dashboard</h2>
+  <p>Welcome to the Dashboard Component!</p>
+  <button (click)="logout()">Logout</button>
+</div>
+
+---app.component.ts---
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
+})
+export class AppComponent {
+  isLoggedIn = false;
+  currentView: 'home' | 'dashboard' = 'home';
+
+  login() {
+    // Perform login logic
+    this.isLoggedIn = true;
+  }
+
+  logout() {
+    // Perform logout logic
+    this.isLoggedIn = false;
+  }
+}
+
+---app-routing.module.ts---
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+
+const routes: Routes = [
+  { path: 'home', component: AppComponent },
+  { path: 'dashboard', component: AppComponent },
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule],
+})
+export class AppRoutingModule {}

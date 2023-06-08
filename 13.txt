@@ -1,0 +1,39 @@
+---app.component.html---
+<h1>Student Information</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Age</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let student of students">
+      <td>{{ student.id }}</td>
+      <td>{{ student.name }}</td>
+      <td>{{ student.age }}</td>
+    </tr>
+  </tbody>
+</table>
+
+---app.component.ts---
+import { Component } from '@angular/core';
+import { Student } from './student.model';
+import { StudentService } from './student.service';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent {
+  students: Student[] = [];
+
+  constructor(private studentService: StudentService) {}
+
+  ngOnInit() {
+    this.students = this.studentService.getStudents();
+  }
+}

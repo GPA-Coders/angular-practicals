@@ -1,0 +1,90 @@
+---app.component.html---
+<div>
+  <h2>Enter Faculty Details</h2>
+  <form [formGroup]="facultyForm" (ngSubmit)="submitForm()">
+    <div>
+      <label for="code">Code:</label>
+      <input type="text" id="code" formControlName="code">
+    </div>
+    <div>
+      <label for="name">Name:</label>
+      <input type="text" id="name" formControlName="name">
+    </div>
+    <div>
+      <label for="email">Email:</label>
+      <input type="email" id="email" formControlName="email">
+    </div>
+    <div>
+      <label for="type">Type:</label>
+      <select id="type" formControlName="type">
+        <option value="full-time">Full-time</option>
+        <option value="part-time">Part-time</option>
+      </select>
+    </div>
+    <div>
+      <label for="status">Faculty Status:</label>
+      <select id="status" formControlName="status">
+        <option value="active">Active</option>
+        <option value="inactive">Inactive</option>
+      </select>
+    </div>
+    <div formArrayName="subjects">
+      <h4>Subjects Teaching</h4>
+      <div *ngFor="let subject of subjects.controls; let i=index" [formGroupName]="i">
+        <input type="text" formControlName="name">
+        <button type="button" (click)="removeSubject(i)">Remove</button>
+      </div>
+      <button type="button" (click)="addSubject()">Add Subject</button>
+    </div>
+    <button type="submit">Submit</button>
+  </form>
+</div>
+
+
+---app.component.ts---
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css']
+})
+export class AppComponent implements OnInit {
+  facultyForm!: FormGroup;
+
+  constructor(private formBuilder: FormBuilder) { }
+
+  ngOnInit() {
+    this.facultyForm = this.formBuilder.group({
+      code: ['', Validators.required],
+      name: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      type: ['full-time'],
+      status: ['active'],
+      subjects: this.formBuilder.array([])
+    });
+  }
+
+  get subjects() {
+    return this.facultyForm.get('subjects') as FormArray;
+  }
+
+  addSubject() {
+    const subjectGroup = this.formBuilder.group({
+      name: ['', Validators.required]
+    });
+    this.subjects.push(subjectGroup);
+  }
+
+  removeSubject(index: number) {
+    this.subjects.removeAt(index);
+  }
+
+  submitForm() {
+    if (this.facultyForm.valid) {
+      console.log('Faculty form submitted:', this.facultyForm.value);
+      // Handle form submission logic here
+    }
+  }
+}
